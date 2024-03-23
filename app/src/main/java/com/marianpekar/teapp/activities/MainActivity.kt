@@ -13,6 +13,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.marianpekar.teapp.R
 import com.marianpekar.teapp.adapters.RecordsAdapter
 import com.marianpekar.teapp.data.RecordsStorage
+import com.posthog.android.PostHogAndroid
+import com.posthog.android.PostHogAndroidConfig
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,8 +22,24 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter : RecordsAdapter
     private lateinit var records : RecordsStorage
 
+    companion object {
+        const val POSTHOG_API_KEY = "phc_pQ70jJhZKHRvDIL5ruOErnPy6xiAiWCqlL4ayELj4X8"
+        // usually 'https://app.posthog.com' or 'https://eu.posthog.com'
+        const val POSTHOG_HOST = "https://app.posthog.com"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val config = PostHogAndroidConfig(
+            apiKey = POSTHOG_API_KEY,
+            host = POSTHOG_HOST,
+        )
+        config.sessionReplay = true
+        config.debug = true
+        config.sessionReplayConfig.maskAllImages = false
+        config.sessionReplayConfig.maskAllTextInputs = false
+        PostHogAndroid.setup(this, config)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
